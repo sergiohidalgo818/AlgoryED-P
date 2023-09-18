@@ -24,5 +24,3 @@ for i in range(10, 21):
     m = np.random.uniform(low=0, high=1, size=(dim, dim)) 
     timings = %timeit -o -n 10 -r 5 -q matrix_multiplication(m, m)
     l_timings.append([dim, timings.best])
-
-print(l_timings)
