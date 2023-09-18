@@ -13,10 +13,29 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
     # Si son incompatibles, devuelve None
     if shape_m_1[1] != shape_m_2[0]:
         return None
-   
+    
+    # la matriz resultante tendra las filas de m1 y columnas de m2
+    m_r: np.ndarray = np.empty ((shape_m_1[0],shape_m_2[1])) 
     # Si son compatibles, se multiplican y se devuelve la matriz resultante 
-    m_t: np.ndarray = m_1.dot(m_2)
-    return m_t
+    # con np.dot :
+    # m_r: np.ndarray = m_1.dot(m_2)
+
+    # m_1 -> (i,j) m_2 -> (k,z)
+    # bucle de filas m_1
+    for i in range(shape_m_1[0]):
+        # bucle de columnas m_2
+        for z in range(shape_m_2[1]):
+            num = 0
+            # bucle de sumas y multiplicaciones
+            for k,j in enumerate(range(shape_m_1[1])):
+                # se multiplica cada numero correspondiente 
+                # de la fila de m_1 y la columna de m_2
+                num += m_1[i,j]*m_2[k,z]
+
+            # se multimplican ambos valores
+            m_r[i,z] = num
+
+    return m_r
 
 # lista de tiempos
 l_timings = []
@@ -70,10 +89,11 @@ def bb(t: List, f: int, l: int, key: int)-> int:
         elif t[m] < key:
             # se cambia el primero por el mediano mas 1
             f = m+1
-    # en cualquier otro caso es igual y por tanto se devuelve 
+        # en cualquier otro caso es igual y por tanto se devuelve 
         else:
             return m
         
+        # si no se ha devuelto se calcula de nuevo el mediano
         m = int((f+l)/2)
 
 
