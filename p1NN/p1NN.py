@@ -20,10 +20,28 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
 
 def rec_bb(t: List, f: int, l: int, key: int)-> int:
-    pass
+    m = (f+l)/2
+
+    if t[m] > key:
+        rec_bb(t, f, m-1, key)
+    elif t[m] < key:
+        rec_bb(t, m+1, l, key)
+
+    return m
 
 def bb(t: List, f: int, l: int, key: int)-> int:
-    pass
+    m = (f+l)/2
+    
+    while t[m] != key:
+
+        if t[m] > key:
+            l = m-1
+        elif t[m] < key:
+            f = m+1
+        
+        m = (f+l)/2
+
+    return m
 
 
 l_timings = []
@@ -33,7 +51,7 @@ for i in range(10, 21):
     timings = %timeit -o -n 10 -r 5 -q matrix_multiplication(m, m)
     l_timings.append([dim, timings.best])
 
-print("\nTimings arrays " +l_timings)
+print("\nTimings arrays " +str(l_timings))
 
 
 l_timingsbb = []
@@ -44,7 +62,7 @@ for size in enumerate(range(5, 15)):
     l_timingsbb.append([len(t), timings.best])
     a_timings = np.array(a_timings)
 
-print("\nTimings bb " + l_timingsbb)
+print("\nTimings bb " + str(l_timingsbb))
 
 l_timingsbbi = []
 for size in enumerate(range(5, 15)):
@@ -54,4 +72,4 @@ for size in enumerate(range(5, 15)):
     l_timingsbbi.append([len(t), timings.best])
     a_timingsbbi = np.array(l_timingsbbi)
 
-print("\nTimings bb " + a_timingsbbi)
+print("\nTimings bb " + str(a_timingsbbi))
