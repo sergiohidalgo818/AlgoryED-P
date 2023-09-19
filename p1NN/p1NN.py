@@ -2,13 +2,12 @@ import numpy as np
 from typing import Tuple
 from typing import List
 
-# 1A
+# I-A
 def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
     # Se obtienen las dimensiones de cada matriz
     shape_m_1 = np.shape(m_1)
     shape_m_2 = np.shape(m_2)
-    print()
     # Si son incompatibles, devuelve None
     if shape_m_1[1] != shape_m_2[0]:
         return None
@@ -36,7 +35,7 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
 
 
-#1B
+# I-B
 def rec_bb(t: List, f: int, l: int, key: int)-> int:
     # m es la parte media de la lista (primero + ultimo)/2
     m = int((f+l)/2)
@@ -78,7 +77,7 @@ def bb(t: List, f: int, l: int, key: int)-> int:
         # si no se ha devuelto se calcula de nuevo el mediano
         m = int((f+l)/2)
 
-#1C
+# I-C
 def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
     # Se obtienen las dimensiones de cada matriz
@@ -97,3 +96,23 @@ def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
 
     return m_r
+
+# II-A
+def min_heapify(h: np.ndarray, i: int):
+    pass
+
+def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
+    pass
+
+def create_min_heap(h: np.ndarray):
+    pass
+
+#II-B
+def pq_ini():
+    pass
+
+def pq_insert(h: np.ndarray, k: int)-> np.ndarray:
+    pass
+
+def pq_remove(h: np.ndarray)-> Tuple[int, np.ndarray]:
+    pass
