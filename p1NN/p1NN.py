@@ -116,3 +116,24 @@ for size in enumerate(range(5, 15)):
     a_timingsbbi = np.array(l_timingsbbi)
 
 print("\nTimings bbi " + str(a_timingsbbi))
+
+
+#1C
+def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
+
+    # Se obtienen las dimensiones de cada matriz
+    shape_m_1 = np.shape(m_1)
+    shape_m_2 = np.shape(m_2)
+
+    # Si son incompatibles, devuelve None
+    if shape_m_1[1] != shape_m_2[0]:
+        return None
+    
+    # la matriz resultante tendra las filas de m1 y columnas de m2
+    m_r: np.ndarray = np.empty ((shape_m_1[0],shape_m_2[1])) 
+    # Si son compatibles, se multiplican y se devuelve la matriz resultante 
+    # con np.dot :
+    m_r: np.ndarray = m_1.dot(m_2)
+
+
+    return m_r
