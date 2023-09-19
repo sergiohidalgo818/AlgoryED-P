@@ -38,8 +38,8 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 # I-B
 def rec_bb(t: List, f: int, l: int, key: int)-> int:
     # m es la parte media de la lista (primero + ultimo)/2
+        
     m = int((f+l)/2)
-
     # si el elemento del medio es mayor que el numero a buscar
     if t[m] > key:
         # se cambia el ultimo por el mediano menos 1
@@ -50,10 +50,14 @@ def rec_bb(t: List, f: int, l: int, key: int)-> int:
         # se cambia el primero por el mediano mas 1
         # y se llama de nuevo a la funcion
         rec_bb(t, m+1, l, key)
-
-    # en cualquier otro caso es igual y por tanto se devuelve 
-    # su posicion en la tabla
-    return m
+    # si es igual se devuelve m 
+    elif t[m] == key:
+        return m
+    
+    # si el primero y el segundo son iguales  
+    elif f==l:
+        # returna None
+        return None
 
 def bb(t: List, f: int, l: int, key: int)-> int:
     # m es la parte media de la lista (primero + ultimo)/2
@@ -70,12 +74,16 @@ def bb(t: List, f: int, l: int, key: int)-> int:
         elif t[m] < key:
             # se cambia el primero por el mediano mas 1
             f = m+1
-        # en cualquier otro caso es igual y por tanto se devuelve 
-        else:
+        # si es igual se devuelve m
+        elif t[m] == key:
             return m
-        
         # si no se ha devuelto se calcula de nuevo el mediano
         m = int((f+l)/2)
+    
+    # si el primero y el segundo son iguales  
+    if f==l:
+        # returna None
+        return None
 
 # I-C
 def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
@@ -99,7 +107,18 @@ def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
 # II-A
 def min_heapify(h: np.ndarray, i: int):
-    pass
+    while 2*i+2 <= h.size:
+        ind = max(h, h.size, 2*i+1, 2*i+2)
+        if (ind != i):
+            
+            # swap
+            aux = h[i]
+            h[i] = h[ind]
+            h[ind] = aux
+            
+            i=ind
+        else:
+            return
 
 def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
     pass

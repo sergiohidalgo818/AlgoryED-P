@@ -68,7 +68,9 @@ if __name__=='__main__':
     #         print("fun = " +str(m_r))
     #         print("auto = " +str(m_rauto))
 
-    data = []
+    # data = []
+    #
+    # with open(file_name, 'w') as outfile:  
+    #    json.dump(data, outfile)
     
-    with open(file_name, 'w') as outfile:  
-        json.dump(data, outfile)
+    print((int (3/2)))
