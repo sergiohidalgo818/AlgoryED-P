@@ -107,24 +107,42 @@ def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
 
 # II-A
 def min_heapify(h: np.ndarray, i: int):
-    while 2*i+2 <= h.size:
-        ind = max(h, h.size, 2*i+1, 2*i+2)
-        if (ind != i):
-            
-            # swap
-            aux = h[i]
-            h[i] = h[ind]
-            h[ind] = aux
-            
-            i=ind
-        else:
-            return
+
+    largest = i 
+    l = 2 * i + 1     
+    r = 2 * i + 2     
+ 
+
+    if l < h.size and h[largest] < h[l]:
+        largest = l
+ 
+    if r < h.size and h[largest] < h[r]:
+        largest = r
+ 
+    if largest != i:
+        h[i], h[largest] = h[largest], h[i]  
+  
+        min_heapify(h, largest)
+
+    
 
 def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
-    pass
+    h[h.size+1] = k
+    min_heapify(h, h.size-1)
+    return h
 
 def create_min_heap(h: np.ndarray):
-    pass
+    N = len(h)
+ 
+    # Build a maxheap.
+    for i in range(N//2 - 1, -1, -1):
+        min_heapify(h, i)
+ 
+    # One by one extract elements
+    for i in range(N-1, 0, -1):
+        h[i], h[0] = h[0], h[i]  # swap
+        min_heapify(h, i)
+ 
 
 #II-B
 def pq_ini():
