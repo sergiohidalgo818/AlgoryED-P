@@ -82,7 +82,6 @@ def bb(t: List, f: int, l: int, key: int)-> int:
     
     # si el primero y el segundo son iguales  
     if f==l:
-        # returna None
         return None
 
 # I-C
@@ -102,21 +101,22 @@ def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
     # con np.dot :
     m_r: np.ndarray = m_1.dot(m_2)
 
-
     return m_r
 
 # II-A
 def min_heapify(h: np.ndarray, i: int):
 
     largest = i 
-    l = 2 * i + 1     
+    l = 2 * i + 1
     r = 2 * i + 2     
- 
+    
+    if r > h.size:
+        return
 
-    if l < h.size and h[largest] < h[l]:
+    if h[r] < h[largest] and h[largest] < h[l]:
         largest = l
  
-    if r < h.size and h[largest] < h[r]:    
+    if h[l] < h[largest] and h[largest] < h[r]:    
         largest = r
  
     if largest != i:
