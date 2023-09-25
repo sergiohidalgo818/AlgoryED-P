@@ -116,7 +116,7 @@ def min_heapify(h: np.ndarray, i: int):
     if l < h.size and h[largest] < h[l]:
         largest = l
  
-    if r < h.size and h[largest] < h[r]:
+    if r < h.size and h[largest] < h[r]:    
         largest = r
  
     if largest != i:
@@ -135,11 +135,11 @@ def create_min_heap(h: np.ndarray):
     N = len(h)
  
     # Build a maxheap.
-    for i in range(N//2 - 1, -1, -1):
+    for i in range((N/2)-1):
         min_heapify(h, i)
  
     # One by one extract elements
-    for i in range(N-1, 0, -1):
+    for i in range(N-1):
         h[i], h[0] = h[0], h[i]  # swap
         min_heapify(h, i)
  
