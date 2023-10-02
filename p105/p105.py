@@ -113,43 +113,58 @@ def min_heapify(h: np.ndarray, i: int):
     if r > h.size:
         return
 
-    if h[r] < h[largest] and h[largest] < h[l]:
+    if l < len(h) and h[i] > h[l]:
         largest = l
  
-    if h[l] < h[largest] and h[largest] < h[r]:    
+    if r < len(h) and h[r] < h[largest]:    
         largest = r
  
     if largest != i:
         h[i], h[largest] = h[largest], h[i]  
-  
         min_heapify(h, largest)
 
     
 
 def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
-    h[h.size+1] = k
-    min_heapify(h, h.size-1)
-    return h
+    np.append(h, k)
+    j = len(h) - 1 
+
+    while j > 0 and h[(j-1)//2] > h[j]:
+        h[(j-1)//2], h[j] = h[j], h[(j-1)//2]
+        j =(j-1)//2
 
 def create_min_heap(h: np.ndarray):
-    N = len(h)
- 
-    # Build a maxheap.
-    for i in range((N/2)-1):
-        min_heapify(h, i)
- 
-    # One by one extract elements
-    for i in range(N-1):
-        h[i], h[0] = h[0], h[i]  # swap
-        min_heapify(h, i)
- 
+    j = ((len(h))-1)//2
+
+    while j >-1:
+        min_heapify (h, j)
+        j -= 1
+    return h
+            
+def remove_min_hep(h: np.ndarray):
+    if len(h) == 0:
+        raise IndexError('Empty heap')
+    
+    root = h[0]
+    
+    # swapp the root with the last node
+    h[0] =  h[len(h)-1]
+    
+    h.pop()
+    min_heapify(h, 0)
+    
+    return root
 
 #II-B
 def pq_ini():
-    pass
+    q = np.ndarray
+    return q
 
 def pq_insert(h: np.ndarray, k: int)-> np.ndarray:
-    pass
+    insert_min_heap(h, k)
+    return h
 
 def pq_remove(h: np.ndarray)-> Tuple[int, np.ndarray]:
-    pass
+    root = remove_min_hep(h)
+    return root, h
+

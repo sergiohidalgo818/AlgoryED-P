@@ -1,6 +1,8 @@
 import numpy as np
 from typing import Tuple
-
+from p105 import *
+from random import randint
+import numpy as np
 import json
 
 if __name__=='__main__':
@@ -72,5 +74,15 @@ if __name__=='__main__':
     #
     # with open(file_name, 'w') as outfile:  
     #    json.dump(data, outfile)
-    
-    print((int (3/2)))
+
+    for j in range(3):
+        size = randint(8, 14)
+        aux = np.ndarray(shape=(0,))
+        for i in range(size):
+            np.append(aux, randint(0, 50))
+        
+        print("NO ORDENADA",aux)
+        print(np.size(aux))
+        create_min_heap(aux)
+        print("ORDENADA",aux)
+        print("\n")
