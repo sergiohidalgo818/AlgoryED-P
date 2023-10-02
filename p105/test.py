@@ -77,11 +77,13 @@ if __name__=='__main__':
 
     for j in range(3):
         size = randint(8, 14)
-        aux = np.ndarray(shape=(0,))
+        auxl = list()
         for i in range(size):
-            np.append(aux, randint(0, 50))
-        
-        print("NO ORDENADA",aux)
+
+           auxl.append(randint(0, 50))
+
+        print("NO ORDENADA",auxl)
+        aux = np.random.permutation(auxl)
         print(np.size(aux))
         create_min_heap(aux)
         print("ORDENADA",aux)
