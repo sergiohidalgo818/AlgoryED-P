@@ -85,6 +85,6 @@ if __name__=='__main__':
         print("NO ORDENADA",auxl)
         aux = np.random.permutation(auxl)
         print(np.size(aux))
-        create_min_heap(aux)
-        print("ORDENADA",aux)
+        
+        print("ORDENADA",create_min_heap(aux))
         print("\n")

@@ -104,41 +104,53 @@ def matrix_multiplication_dot(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
     return m_r
 
 # II-A
-def min_heapify(h: np.ndarray, i: int):
 
+
+
+def min_heapify(h: np.ndarray, i: int):
+    h_len = len(h) - 1
+    if i < 0 or i > h_len:
+        return None
+    
     largest = i 
     l = 2 * i + 1
     r = 2 * i + 2     
-    
-    if r > h.size:
-        return
 
-    if l < len(h) and h[i] > h[l]:
-        largest = l
- 
-    if r < len(h) and h[r] < h[largest]:    
-        largest = r
- 
-    if largest != i:
-        h[i], h[largest] = h[largest], h[i]  
-        min_heapify(h, largest)
+    while l <= h_len:
+        largest = i
+        if h[i] > h[l]:
+            largest = l
+        if r <= h_len and h[i] > h[r] and h[r] < h[largest]:
+            largest = r
+        if largest > i:
+            h[i], h[largest] = h[largest], h[i]
+            i = largest
+        else:
+            break
+
+    return h
 
     
 
 def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
-    np.append(h, k)
-    j = len(h) - 1 
+    if h is None:
+        return np.array([k])
+
+    j = len(h)
+    h = np.append(h, k)
 
     while j > 0 and h[(j-1)//2] > h[j]:
         h[(j-1)//2], h[j] = h[j], h[(j-1)//2]
         j =(j-1)//2
 
 def create_min_heap(h: np.ndarray):
-    j = ((len(h))-1)//2
+    if h is None:
+        return None
+    
+    i = ((len(h))-1)//2
 
-    while j >-1:
-        min_heapify (h, j)
-        j -= 1
+    for j in range(i, -1, -1):
+        min_heapify(h, j)
     return h
             
 def remove_min_hep(h: np.ndarray):
