@@ -28,7 +28,7 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray)-> np.ndarray:
                 # de la fila de m_1 y la columna de m_2
                 num += m_1[i,x]*m_2[x,j]
 
-            # se multimplican ambos valores
+            # se multiplican ambos valores
             m_r[i,j] = num
             
     return m_r
@@ -149,30 +149,31 @@ def create_min_heap(h: np.ndarray):
 
     return h
             
-def remove_min_hep(h: np.ndarray):
-    if len(h) == 0:
-        raise IndexError('Empty heap')
+def minheap_extract(h:np.ndarray) -> Tuple[int, np.ndarray]:
+    tam = len(h)
+    if tam == 0:
+        return list()
     
     root = h[0]
-    
-    # swapp the root with the last node
-    h[0] =  h[len(h)-1]
-    
-    h.pop()
+
+    aux = int(h[tam-1])
+    for i in range(tam-1, 0,-1):
+        aux2 = int(h[i-1])
+        h[i-1] = aux
+        aux = int(aux2)
+        
     min_heapify(h, 0)
-    
-    return root
+    return root, h[:-1]
 
 #II-B
 def pq_ini():
-    q = np.ndarray
+    q = np.ndarray(shape=0)
     return q
 
 def pq_insert(h: np.ndarray, k: int)-> np.ndarray:
-    insert_min_heap(h, k)
-    return h
+    return insert_min_heap(h, k)
 
 def pq_remove(h: np.ndarray)-> Tuple[int, np.ndarray]:
-    root = remove_min_hep(h)
-    return root, h
+    root = minheap_extract(h)
+    return [root, create_min_heap(h[:-1])]
 
