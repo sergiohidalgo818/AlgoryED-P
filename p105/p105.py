@@ -129,9 +129,9 @@ def min_heapify(h: np.ndarray, i: int):
 def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
     if h is None:
         return np.array([k])
-
+    
+    i = len(h) 
     h = np.append(h, k)
-    i = len(h) -1
 
     while i > 0 and h[(i-1)//2] > h[i]:
         h[i], h[(i-1)//2] = h[(i-1)//2], h[i]
@@ -143,12 +143,10 @@ def insert_min_heap(h: np.ndarray, k: int)-> np.ndarray:
 def create_min_heap(h: np.ndarray):
     if h is None:
         return None
-    
-    j = ((len(h))-1)//2
 
-    while j >-1:
-        min_heapify (h, j)
-        j -= 1
+    for node in range((len(h) - 1) // 2, -1, -1):
+        min_heapify(h, node)
+
     return h
             
 def remove_min_hep(h: np.ndarray):
