@@ -162,7 +162,7 @@ def minheap_extract(h:np.ndarray) -> Tuple[int, np.ndarray]:
         h[i-1] = aux
         aux = int(aux2)
         
-    min_heapify(h, 0)
+    min_heapify(h[:-1], 0)
     return root, h[:-1]
 
 #II-B
@@ -174,6 +174,17 @@ def pq_insert(h: np.ndarray, k: int)-> np.ndarray:
     return insert_min_heap(h, k)
 
 def pq_remove(h: np.ndarray)-> Tuple[int, np.ndarray]:
-    root = minheap_extract(h)
-    return [root, create_min_heap(h[:-1])]
+    root,h = minheap_extract(h)
+    return [root, create_min_heap(h)]
 
+
+def min_heap_sort(h: np.ndarray)-> np.ndarray:
+    h = create_min_heap(h)
+    ret = list()
+    
+    while len(h) > 0:   
+        root,h = minheap_extract(h)
+        ret.append(root)
+        h = create_min_heap(h)
+    
+    return np.array(ret)

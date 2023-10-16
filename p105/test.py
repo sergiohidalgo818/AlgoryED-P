@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Tuple
 from p105 import *
+from p105 import min_heap_sort
 from random import randint
 import numpy as np
 import json
@@ -84,7 +85,6 @@ if __name__=='__main__':
 
         print("NO ORDENADA",auxl)
         aux = np.random.permutation(auxl)
-        print(np.size(aux))
         
-        print("ORDENADA",create_min_heap(aux))
+        print("ORDENADA", min_heap_sort(aux))
         print("\n")
