@@ -12,7 +12,8 @@ def f(N):
 
 # Funcion de coste teorico short_min_heap
 def f_heap(N):
-    return N*(math.log(N, 10))
+    
+    return N*(np.log10(N))
 
 # Funcion para ajustar los tiempos reales a la función teórica
 def tofit_heap(x, a, b):
@@ -176,10 +177,7 @@ def graficasShortHeap():
     l_timings_minsh = np.array(data['l_timings_minsh'])
 
     # y se extraen los valores de N y los tiempos de ejecución
-    N_minhsh, tiempos_minhsh = l_timings_minsh[:, 0], l_timings_minsh[:, 1]
-
-    x = N_minhsh
-    y = tiempos_minhsh
+    x, y = l_timings_minsh[:, 0], l_timings_minsh[:, 1]
 
     # se normalizan los tiempos 
     y = y / y[0]
@@ -189,12 +187,22 @@ def graficasShortHeap():
     a, b = pars
 
     # y guardar los valores de y que corresponderan con la función teórica
-    y_fit = a * f(x) + b
+    y_fit = a * f_heap(x) + b
 
+
+    # se normalizan los tiempos 
+    y = y / y[0]
+
+    # para después ajustar los datos 
+    pars, _ = curve_fit(tofit, x, y)
+    a, b = pars
+
+    # y guardar los valores de y que corresponderan con la función teórica
+    y_fit = a * f(x) + b    
 
     # Grafica del short minheap
     plt.figure(figsize=(10, 5))
-    plt.plot(N_minhsh, tiempos_minhsh, marker=' ', label='shortMinheap')
+    plt.plot(x, y, marker=' ', label='shortMinheap')
     plt.plot(x, y_fit, label='Ajuste: N log(N)')
     plt.xlabel('N')
     plt.ylabel('Tiempo de Ejecución (s)')
