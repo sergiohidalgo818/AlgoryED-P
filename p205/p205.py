@@ -85,10 +85,17 @@ def kruskal(n: int, l_g: List) -> Tuple[int, List]:
 
 def complete_graph(n_nodes: int, max_weight=50)-> Tuple[int, List]:
     graph_gen = list()
-    
-    for i in n_nodes:
+    v=n_nodes-1
 
+    for i in range(n_nodes):
         w = random.randint(1, max_weight)
+        u = i
+        graph_gen.append((u,v,w))
+        v-=1
+        if u >= v:
+            u,v=v,u
+
+    return graph_gen
 
 def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)-> List:
     pass
