@@ -99,13 +99,7 @@ def complete_graph(n_nodes: int, max_weight=50)-> Tuple[int, list]:
     return n_nodes, graph_gen
 
 def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)-> list:
-    graph_list = list()
-    incr = n_nodes_ini
-    for i in range(n_graphs):#cambiar
-        
-        graph_list.append(complete_graph())
-        if n_nodes_ini < n_nodes_fin:
-            incr+=step
+    pass
 
 def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)-> list:
     pass
