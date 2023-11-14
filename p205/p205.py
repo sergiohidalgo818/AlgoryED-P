@@ -6,6 +6,7 @@ from queue import PriorityQueue
 import random
 import timeit
 import time
+import itertools
 
 TIMES_EXEC = 1000
 
@@ -195,16 +196,66 @@ def dist_matrix(n_nodes: int, w_max=10) -> np.ndarray:
 
 
 def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
-    pass
+
+    visited_nodes = list()
+    node = node_ini
+    node_prov = 0
+
+    while len(visited_nodes) < dist_m.shape[0]:
+        max_dist = 9999999
+        for i in range(0, dist_m.shape[1]):
+            if dist_m[node][i] < max_dist and i not in visited_nodes:
+                max_dist=dist_m[node][i]
+                node_prov = i
+        
+        visited_nodes.append(node_prov)
+        node = node_prov
+
+    visited_nodes.append(node_ini)
+    return visited_nodes
 
 
-def len_circuit(circuit: List, dist_m: np.ndarray) -> int:
-    pass
+def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
+    circuit_len = 0
 
+    for i in range(len(circuit)-1):
+        circuit_len += dist_m[circuit[i]][circuit[i+1]]
+
+    return circuit_len
 
 def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
-    pass
+    
+    final_list = greedy_tsp(dist_m, 0)
+
+    final_value = len_circuit(aux_list, dist_m)
+
+    for i in range(1, dist_m.shape[0]):
+        aux_list = greedy_tsp(dist_m, i)
+        aux_value = len_circuit(aux_list, dist_m)
+       
+        if aux_value < final_value:
+            final_value = aux_value
+            final_list = greedy_tsp(dist_m, i)
+
+    return final_list
 
 
 def exhaustive_tsp(dist_m: np.ndarray) -> list:
-    pass
+    list_nodes = [i for i in range(dist_m.shape[0])]
+    perms = itertools.permutations(list_nodes)
+
+    final_value = 9999999
+
+    for aux_tuple in perms:
+
+        aux_list = [i for i in aux_tuple]
+        aux_list.append(aux_list[0])
+
+
+        aux_value = len_circuit(aux_list, dist_m)
+     
+        if aux_value < final_value:
+            final_value = aux_value
+            final_list = aux_list.copy()
+
+    return final_list
