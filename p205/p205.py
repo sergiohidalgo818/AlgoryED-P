@@ -225,11 +225,9 @@ def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
 
 def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
     
-    final_list = greedy_tsp(dist_m, 0)
+    final_value = 9999999
 
-    final_value = len_circuit(aux_list, dist_m)
-
-    for i in range(1, dist_m.shape[0]):
+    for i in range(0, dist_m.shape[0]):
         aux_list = greedy_tsp(dist_m, i)
         aux_value = len_circuit(aux_list, dist_m)
        
