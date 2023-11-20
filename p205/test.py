@@ -9,3 +9,7 @@ lista = greedy_tsp(test,4)
 #time_kruskal_2(20, 10, 20, 2)
 
 print(exhaustive_tsp(test))
+
+kruskal_times = time_kruskal(10, 2, 20, 2)
+
+print(kruskal_times)

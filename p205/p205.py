@@ -14,6 +14,12 @@ TIMES_EXEC = 1000
 
 
 def init_cd(n: int) -> np.ndarray:
+    """
+    Esta funcion inicializa el conjunto disjunto.
+    Argumentos:
+        n : int -> Tamaño array
+    Retorno: Una array con el conjunto inicializado
+    """
     if n <= 0:
         return np.array([])
 
@@ -22,7 +28,14 @@ def init_cd(n: int) -> np.ndarray:
 
 
 def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
-
+    """
+    Esta funcion realiza la union.
+    Argumentos:
+        rep_1 : int -> Representante conjunto 1
+        rep_2 : int -> Representante conjunto 2
+        p_cd : np.ndarray -> Array del conjunto disjunto
+    Retorno: El nuevo representante
+    """
     if p_cd[rep_2] < p_cd[rep_1]:  # el representante 2 tiene mayor rango
         # por tanto el representante 2 pasa a ser el padre del 1
         p_cd[rep_1] = rep_2
@@ -38,7 +51,13 @@ def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
 
 
 def find(ind: int, p_cd: np.ndarray) -> int:
-
+    """
+    Esta funcion realiza la busqueda.
+    Argumentos:
+        ind : int -> Representante a buscar
+        p_cd : np.ndarray -> Array del conjunto disjunto
+    Retorno: El indice del representante
+    """
     z = ind
     # mientras no se haya encontrado el representane
     while p_cd[z] >= 0:
@@ -59,6 +78,13 @@ def find(ind: int, p_cd: np.ndarray) -> int:
 
 
 def create_pq(n: int, l_g: list) -> queue.PriorityQueue:
+    """    
+        Esta funcion inicializa la cola de prioridad.
+    Argumentos:
+        n : int -> Tamaño de la cola
+        l_g : list -> Lista de nodos que representa un grafo
+    Retorno: La cola de prioridad
+    """
     if n <= 0 or len(l_g) <= 0:
         return PriorityQueue(0)
 
@@ -75,6 +101,13 @@ def create_pq(n: int, l_g: list) -> queue.PriorityQueue:
 
 
 def kruskal(n: int, l_g: list) -> Tuple[int, list]:
+    """    
+        Esta funcion realiza el algoritmo de kruskal.
+    Argumentos:
+        n : int -> Tamaño de la lista
+        l_g : list -> Lista de nodos que representa un grafo
+    Retorno: Una tupla del tamaño y la lista resultante
+    """
     l_t = []  # nuevo grafo
     cd = init_cd(n)  # se inicializa el conjunto disjunto
     queue = create_pq(n, l_g)  # se inicializa la cola de prioridad
@@ -84,13 +117,20 @@ def kruskal(n: int, l_g: list) -> Tuple[int, list]:
         y = find(v, cd)  # y uego por otra rama
         if x != y:
             l_t.append((u, v))  # si son distintos se introduce tal cual
-        union(x, y, cd)  # se hace la union de ambos
+            union(x, y, cd)  # se hace la union de ambos
     return (n, l_t)
 
 
 # II - B
 
 def complete_graph(n_nodes: int, max_weight=50) -> Tuple[int, list]:
+    """    
+        Esta funcion genera un grafo con pesos pseudoaleatorios.
+    Argumentos:
+        n_nodes : int -> Numero de nodos
+        max_weight : int -> Peso maximo
+    Retorno: Una tupla del numero de nodos y la lista resultante
+    """
     graph_gen = list()
     v = n_nodes-1
     for i in range(n_nodes):
@@ -104,14 +144,24 @@ def complete_graph(n_nodes: int, max_weight=50) -> Tuple[int, list]:
 
 
 def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
+    """    
+        Esta funcion genera los tiempos que tarda toda la funcion de kruskal.
+    Argumentos:
+        n_graphs : int -> Numero de grafos
+        n_nodes_ini : int -> Numero inicial de nodos
+        n_nodes_fin : int -> Numero final de nodos
+        step : int -> Salto entre numero de nodos y numero de nodos
+    Retorno: Una lista con los tiempos resultantes
+    """
     graph_list = list()
     incr = n_nodes_ini
-    number_of = (n_nodes_fin - n_nodes_ini)/step
-    n_each = n_graphs/number_of
+    number_of = int((n_nodes_fin - n_nodes_ini)/step)
+    n_each = int(n_graphs/number_of)
     incr = n_nodes_ini
     count = 1
     times_list = list()
 
+    # bucle para crear los grafos con distinto numero de nodos
     for i in range(n_graphs):
         graph_list.append(complete_graph(incr))
         if count == n_each:
@@ -121,19 +171,29 @@ def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -
 
     count = 1
     val = 0
+
+    # bucle para aplicar kruskal
     for i in graph_list:
         times = timeit.Timer(lambda: kruskal(i[0], i[1]))
         val += times.timeit(TIMES_EXEC)
+        count += 1
         if count == n_each:
             times_list.append(val/count)
             count = 0
             val = 0
 
-        count += 1
-
     return times_list
 
+
 def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
+    """    
+        Esta funcion realiza el algoritmo de kruskal pero
+        en relacion a los conjuntos disjuntos.
+    Argumentos:
+        n : int -> Tamaño de la lista
+        l_g : list -> Lista de nodos que representa un grafo
+    Retorno: Una tupla de los tiempos y dentro otra del tamaño y la lista resultante
+    """
     l_t = []  # nuevo grafo
     cd = init_cd(n)  # se inicializa el conjunto disjunto
     queue = create_pq(n, l_g)  # se inicializa la cola de prioridad
@@ -145,7 +205,7 @@ def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
         y = find(v, cd)  # y luego por otra rama
         if x != y:
             l_t.append((u, v))  # si son distintos se introduce tal cual
-        union(x, y, cd)  # se hace la union de ambos
+            union(x, y, cd)  # se hace la union de ambos
 
     end = time.time()
     times = end - start
@@ -153,14 +213,25 @@ def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
 
 
 def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
+    """    
+        Esta funcion genera los tiempos que tarda toda la funcion de kruskal
+    pero en relacion a los conjuntos disjuntos.
+    Argumentos:
+        n_graphs : int -> Numero de grafos
+        n_nodes_ini : int -> Numero inicial de nodos
+        n_nodes_fin : int -> Numero final de nodos
+        step : int -> Salto entre numero de nodos y numero de nodos
+    Retorno: Una lista con los tiempos resultantes
+    """
     graph_list = list()
     incr = n_nodes_ini
-    number_of = (n_nodes_fin - n_nodes_ini)/step
-    n_each = n_graphs/number_of
+    number_of = int((n_nodes_fin - n_nodes_ini)/step)
+    n_each = int(n_graphs/number_of)
     incr = n_nodes_ini
     count = 1
     times_list = list()
 
+    # bucle para crear los grafos con distinto numero de nodos
     for i in range(n_graphs):
         graph_list.append(complete_graph(incr))
         if count == n_each:
@@ -170,16 +241,16 @@ def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)
 
     count = 1
     val = 0
+    # bucle para aplicar kruskal
     for i in graph_list:
-        valaux=0
-        valaux, _= kruskal_2(i[0], i[1])
-        val+= valaux
+        valaux = 0
+        valaux, _ = kruskal_2(i[0], i[1])
+        val += valaux
+        count += 1
         if count == n_each:
             times_list.append(val/count)
             count = 0
             val = 0
-
-        count += 1
 
     return times_list
 
@@ -187,7 +258,12 @@ def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)
 
 
 def dist_matrix(n_nodes: int, w_max=10) -> np.ndarray:
-    """
+    """    
+        Esta funcion genera una matriz de distancias.
+    Argumentos:
+        n_nodes : int -> Numero de nodes
+        w_max : int -> Numero maximo de peso
+    Retorno: Una array con las distancias
     """
     m = np.random.randint(1, w_max+1, (n_nodes, n_nodes))
     m = (m + m.T) // 2
@@ -196,7 +272,13 @@ def dist_matrix(n_nodes: int, w_max=10) -> np.ndarray:
 
 
 def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
-
+    """    
+        Esta funcion genera un circuito con un algoritmo codicioso.
+    Argumentos:
+        dist_m : np.ndarray -> Matriz de distancias
+        node_ini : int -> Nodo inicial
+    Retorno: Una lista con el trayecto
+    """
     visited_nodes = list()
     node = node_ini
     node_prov = 0
@@ -205,9 +287,9 @@ def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
         max_dist = 9999999
         for i in range(0, dist_m.shape[1]):
             if dist_m[node][i] < max_dist and i not in visited_nodes:
-                max_dist=dist_m[node][i]
+                max_dist = dist_m[node][i]
                 node_prov = i
-        
+
         visited_nodes.append(node_prov)
         node = node_prov
 
@@ -216,6 +298,13 @@ def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
 
 
 def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
+    """    
+        Esta funcion mide la longitud de un circuito
+    Argumentos:
+        circuit : list -> Lista con los nodos del circuito
+        dist_m : np.ndarray -> Matriz de distancias
+    Retorno: La longitud del circuito
+    """
     circuit_len = 0
 
     for i in range(len(circuit)-1):
@@ -223,14 +312,21 @@ def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
 
     return circuit_len
 
+
 def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
-    
+    """    
+        Esta funcion repite el algoritmo anterior desde distintos nodos iniciales
+    Argumentos:
+        dist_m : np.ndarray -> Matriz de distancias
+    Retorno: Una lista con todos los circuitos
+    """
+
     final_value = 9999999
 
     for i in range(0, dist_m.shape[0]):
         aux_list = greedy_tsp(dist_m, i)
         aux_value = len_circuit(aux_list, dist_m)
-       
+
         if aux_value < final_value:
             final_value = aux_value
             final_list = greedy_tsp(dist_m, i)
@@ -239,19 +335,31 @@ def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
 
 
 def exhaustive_tsp(dist_m: np.ndarray) -> list:
+    """    
+        Esta funcion recorre el todos los posibles caminos y escoge el mas corto
+    Argumentos:
+        dist_m : np.ndarray -> Matriz de distancias
+    Retorno: Una lista con todos los circuitos
+    """
+
+    # lista de nodos
     list_nodes = [i for i in range(dist_m.shape[0])]
+    # todas las permutaciones posibles
     perms = itertools.permutations(list_nodes)
 
     final_value = 9999999
 
     for aux_tuple in perms:
 
+        # se forma una lista con todos los elementos de la tupla
         aux_list = [i for i in aux_tuple]
+        # se les agrega el primero otra vez
         aux_list.append(aux_list[0])
 
-
+        # se mide la longitud del circuito
         aux_value = len_circuit(aux_list, dist_m)
-     
+
+        # y se comprueba si es menor que el previo
         if aux_value < final_value:
             final_value = aux_value
             final_list = aux_list.copy()
