@@ -1,12 +1,16 @@
-import numpy as np
+"""
+Ejercicio p205.py
+Autores: Sergio Hidalgo y Miguel Ibanez
+"""
 import itertools
-from typing import List, Dict, Callable, Iterable, Tuple
-import queue
+from typing import Tuple
 from queue import PriorityQueue
+import itertools
+import queue
 import random
 import timeit
 import time
-import itertools
+import numpy as np
 
 TIMES_EXEC = 1000
 
@@ -16,9 +20,10 @@ TIMES_EXEC = 1000
 def init_cd(n: int) -> np.ndarray:
     """
     Esta funcion inicializa el conjunto disjunto.
-    Argumentos:
-        n : int -> Tamaño array
-    Retorno: Una array con el conjunto inicializado
+    Args:
+        n: Tamaño array
+    Returns:
+        array: Una array con el conjunto inicializado
     """
     if n <= 0:
         return np.array([])
@@ -30,33 +35,35 @@ def init_cd(n: int) -> np.ndarray:
 def union(rep_1: int, rep_2: int, p_cd: np.ndarray) -> int:
     """
     Esta funcion realiza la union.
-    Argumentos:
-        rep_1 : int -> Representante conjunto 1
-        rep_2 : int -> Representante conjunto 2
-        p_cd : np.ndarray -> Array del conjunto disjunto
-    Retorno: El nuevo representante
+    Args:
+        rep_1: Representante conjunto 1
+        rep_2: Representante conjunto 2
+        p_cd: Array del conjunto disjunto
+    Returns:
+        rep_1: El nuevo representante
     """
     if p_cd[rep_2] < p_cd[rep_1]:  # el representante 2 tiene mayor rango
         # por tanto el representante 2 pasa a ser el padre del 1
         p_cd[rep_1] = rep_2
         return rep_2
-    elif p_cd[rep_2] > p_cd[rep_1]:  # el representante 1 tiene mayor rango
+    if p_cd[rep_2] > p_cd[rep_1]:  # el representante 1 tiene mayor rango
         # por tanto el representante 1 pasa a ser el padre del 2
         p_cd[rep_2] = rep_1
         return rep_1
-    else:  # ambos representantes tienen mismo rango
-        p_cd[rep_2] = rep_1  # da igual cual será el nuevo padre
-        p_cd[rep_1] -= 1  # se selecciona el 1 como padre del 2
-        return rep_1
+    # ambos representantes tienen mismo rango
+    p_cd[rep_2] = rep_1  # da igual cual será el nuevo padre
+    p_cd[rep_1] -= 1  # se selecciona el 1 como padre del 2
+    return rep_1
 
 
 def find(ind: int, p_cd: np.ndarray) -> int:
     """
     Esta funcion realiza la busqueda.
-    Argumentos:
-        ind : int -> Representante a buscar
-        p_cd : np.ndarray -> Array del conjunto disjunto
-    Retorno: El indice del representante
+    Args:
+        ind: Representante a buscar
+        p_cd: Array del conjunto disjunto
+    Returns:
+        z: El indice del representante
     """
     z = ind
     # mientras no se haya encontrado el representane
@@ -78,12 +85,13 @@ def find(ind: int, p_cd: np.ndarray) -> int:
 
 
 def create_pq(n: int, l_g: list) -> queue.PriorityQueue:
-    """    
-        Esta funcion inicializa la cola de prioridad.
-    Argumentos:
-        n : int -> Tamaño de la cola
-        l_g : list -> Lista de nodos que representa un grafo
-    Retorno: La cola de prioridad
+    """
+    Esta funcion inicializa la cola de prioridad.
+    Args:
+        n: Tamaño de la cola
+        l_g: Lista de nodos que representa un grafo
+    Returns:
+        queue: La cola de prioridad
     """
     if n <= 0 or len(l_g) <= 0:
         return PriorityQueue(0)
@@ -101,12 +109,13 @@ def create_pq(n: int, l_g: list) -> queue.PriorityQueue:
 
 
 def kruskal(n: int, l_g: list) -> Tuple[int, list]:
-    """    
-        Esta funcion realiza el algoritmo de kruskal.
-    Argumentos:
-        n : int -> Tamaño de la lista
-        l_g : list -> Lista de nodos que representa un grafo
-    Retorno: Una tupla del tamaño y la lista resultante
+    """
+    Esta funcion realiza el algoritmo de kruskal.
+    Args:
+        n: Tamaño de la lista
+        l_g: Lista de nodos que representa un grafo
+    Returns:
+        tam_list_tuple: Una tupla del tamaño y la lista resultante
     """
     l_t = []  # nuevo grafo
     cd = init_cd(n)  # se inicializa el conjunto disjunto
@@ -124,12 +133,13 @@ def kruskal(n: int, l_g: list) -> Tuple[int, list]:
 # II - B
 
 def complete_graph(n_nodes: int, max_weight=50) -> Tuple[int, list]:
-    """    
-        Esta funcion genera un grafo con pesos pseudoaleatorios.
-    Argumentos:
-        n_nodes : int -> Numero de nodos
-        max_weight : int -> Peso maximo
-    Retorno: Una tupla del numero de nodos y la lista resultante
+    """
+    Esta funcion genera un grafo con pesos pseudoaleatorios.
+    Args:
+        n_nodes: Numero de nodos
+        max_weight: Peso maximo
+    Returns:
+        graph_gen: Una tupla del numero de nodos y la lista resultante
     """
     graph_gen = list()
     v = n_nodes-1
@@ -143,15 +153,17 @@ def complete_graph(n_nodes: int, max_weight=50) -> Tuple[int, list]:
     return n_nodes, graph_gen
 
 
-def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
-    """    
-        Esta funcion genera los tiempos que tarda toda la funcion de kruskal.
-    Argumentos:
-        n_graphs : int -> Numero de grafos
-        n_nodes_ini : int -> Numero inicial de nodos
-        n_nodes_fin : int -> Numero final de nodos
-        step : int -> Salto entre numero de nodos y numero de nodos
-    Retorno: Una lista con los tiempos resultantes
+def time_kruskal(n_graphs: int,
+                 n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
+    """
+    Esta funcion genera los tiempos que tarda toda la funcion de kruskal.
+    Args:
+        n_graphs: Numero de grafos
+        n_nodes_ini: Numero inicial de nodos
+        n_nodes_fin: Numero final de nodos
+        step: Salto entre numero de nodos y numero de nodos
+    Returns:
+        times_list: Una lista con los tiempos resultantes
     """
     graph_list = list()
     incr = n_nodes_ini
@@ -186,13 +198,14 @@ def time_kruskal(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -
 
 
 def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
-    """    
-        Esta funcion realiza el algoritmo de kruskal pero
+    """
+    Esta funcion realiza el algoritmo de kruskal pero
         en relacion a los conjuntos disjuntos.
-    Argumentos:
-        n : int -> Tamaño de la lista
-        l_g : list -> Lista de nodos que representa un grafo
-    Retorno: Una tupla de los tiempos y dentro otra del tamaño y la lista resultante
+    Args:
+        n: Tamaño de la lista
+        l_g: Lista de nodos que representa un grafo
+    Returns:
+        times_tam_list: Una tupla de los tiempos y la misma tupla que kruskal
     """
     l_t = []  # nuevo grafo
     cd = init_cd(n)  # se inicializa el conjunto disjunto
@@ -212,16 +225,18 @@ def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
     return (times, (n, l_t))
 
 
-def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
-    """    
-        Esta funcion genera los tiempos que tarda toda la funcion de kruskal
-    pero en relacion a los conjuntos disjuntos.
-    Argumentos:
-        n_graphs : int -> Numero de grafos
-        n_nodes_ini : int -> Numero inicial de nodos
-        n_nodes_fin : int -> Numero final de nodos
-        step : int -> Salto entre numero de nodos y numero de nodos
-    Retorno: Una lista con los tiempos resultantes
+def time_kruskal_2(n_graphs: int,
+                   n_nodes_ini: int, n_nodes_fin: int, step: int) -> list:
+    """
+    Esta funcion genera los tiempos que tarda toda la funcion de kruskal
+        pero en relacion a los conjuntos disjuntos.
+    Args:
+        n_graphs: Numero de grafos
+        n_nodes_ini: Numero inicial de nodos
+        n_nodes_fin: Numero final de nodos
+        step: Salto entre numero de nodos y numero de nodos
+    Returns:
+        times_list: Una lista con los tiempos resultantes
     """
     graph_list = list()
     incr = n_nodes_ini
@@ -258,12 +273,13 @@ def time_kruskal_2(n_graphs: int, n_nodes_ini: int, n_nodes_fin: int, step: int)
 
 
 def dist_matrix(n_nodes: int, w_max=10) -> np.ndarray:
-    """    
-        Esta funcion genera una matriz de distancias.
-    Argumentos:
-        n_nodes : int -> Numero de nodes
-        w_max : int -> Numero maximo de peso
-    Retorno: Una array con las distancias
+    """
+    Esta funcion genera una matriz de distancias.
+    Args:
+        n_nodes: Numero de nodes
+        w_max: Numero maximo de peso
+    Returns:
+        m: Una array con las distancias
     """
     m = np.random.randint(1, w_max+1, (n_nodes, n_nodes))
     m = (m + m.T) // 2
@@ -272,12 +288,13 @@ def dist_matrix(n_nodes: int, w_max=10) -> np.ndarray:
 
 
 def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
-    """    
-        Esta funcion genera un circuito con un algoritmo codicioso.
-    Argumentos:
-        dist_m : np.ndarray -> Matriz de distancias
-        node_ini : int -> Nodo inicial
-    Retorno: Una lista con el trayecto
+    """
+    Esta funcion genera un circuito con un algoritmo codicioso.
+    Args:
+        dist_m: Matriz de distancias
+        node_ini: Nodo inicial
+    Returns:
+        visited_nodes: Una lista con el trayecto
     """
     visited_nodes = list()
     node = node_ini
@@ -298,12 +315,13 @@ def greedy_tsp(dist_m: np.ndarray, node_ini=0) -> list:
 
 
 def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
-    """    
-        Esta funcion mide la longitud de un circuito
-    Argumentos:
-        circuit : list -> Lista con los nodos del circuito
-        dist_m : np.ndarray -> Matriz de distancias
-    Retorno: La longitud del circuito
+    """
+    Esta funcion mide la longitud de un circuito
+    Args:
+        circuit: Lista con los nodos del circuito
+        dist_m: Matriz de distancias
+    Returns:
+        circuit_len: La longitud del circuito
     """
     circuit_len = 0
 
@@ -314,11 +332,13 @@ def len_circuit(circuit: list, dist_m: np.ndarray) -> int:
 
 
 def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
-    """    
-        Esta funcion repite el algoritmo anterior desde distintos nodos iniciales
-    Argumentos:
-        dist_m : np.ndarray -> Matriz de distancias
-    Retorno: Una lista con todos los circuitos
+    """
+    Esta funcion repite el algoritmo anterior
+        desde distintos nodos iniciales
+    Args:
+        dist_m: Matriz de distancias
+    Returns:
+        final_list: Una lista con todos los circuitos
     """
 
     final_value = 9999999
@@ -335,11 +355,13 @@ def repeated_greedy_tsp(dist_m: np.ndarray) -> list:
 
 
 def exhaustive_tsp(dist_m: np.ndarray) -> list:
-    """    
-        Esta funcion recorre el todos los posibles caminos y escoge el mas corto
-    Argumentos:
-        dist_m : np.ndarray -> Matriz de distancias
-    Retorno: Una lista con todos los circuitos
+    """
+    Esta funcion recorre el todos los posibles
+        caminos y escoge el mas corto
+    Args:
+        dist_m: Matriz de distancias
+    Returns:
+        final_list: Una lista con todos los circuitos
     """
 
     # lista de nodos
