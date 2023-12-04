@@ -224,4 +224,4 @@ def qsort_5(t: np.ndarray)-> np.ndarray:
     t_smallers, pivot_value, t_greaters = split_pivot(t, mid)
 
     # se une a los pequeños el pivote y a la array resultante, los mayores
-    return  np.append(np.append(qsort_5(t_smallers) , pivot_value), qsort_5(t_greaters))
+    return  np.append(np.append(qsort_5(t_smallers), pivot_value), qsort_5(t_greaters))
