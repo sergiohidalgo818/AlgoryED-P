@@ -7,6 +7,8 @@ from typing import Tuple, Union
 import numpy as np
 from math import ceil
 
+# I-A
+
 def split(t: np.ndarray) -> Tuple[np.ndarray, int, np.ndarray]:
     """
     Esta funcion reparte los elementos de t entre dos arrays
@@ -158,7 +160,7 @@ def pivot5(t: np.ndarray) -> int:
 def qsel5_nr(t: np.ndarray, k: int)-> Union[int, None]:
     """
     Esta funcion aplica de manera no recursiva Quick Select 5
-        usando split.
+        usando split_pivot y pivot5.
     Args:
         t: array con los elementos.
         k: posicion del elemento a encontrar (de 0 a len(t)).
@@ -194,3 +196,32 @@ def qsel5_nr(t: np.ndarray, k: int)-> Union[int, None]:
 
 
     return aux_t[0]
+
+
+# I-C
+
+def qsort_5(t: np.ndarray)-> np.ndarray:
+    """
+    Esta funcion aplica de manera recursiva Quick Sort 5
+        usando split_pivot y pivot5.
+    Args:
+        t: array con los elementos.
+    Returns:
+        ndarray: La array ordenada.
+    """
+
+    # control de errores
+    if len(t) == 0:
+        return t
+
+
+    # si la lista es menor que CUTOFF se usa np.sort
+    if len(t) <= CUTOFF:
+        return np.sort(t)
+    
+    # busqueda del pivote y particion de la lista
+    mid = pivot5(t)
+    t_smallers, pivot_value, t_greaters = split_pivot(t, mid)
+
+    # se une a los pequeños el pivote y a la array resultante, los mayores
+    return  np.append(np.append(qsort_5(t_smallers) , pivot_value), qsort_5(t_greaters))
