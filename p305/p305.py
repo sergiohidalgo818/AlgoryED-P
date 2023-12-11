@@ -4,6 +4,7 @@ Autores: Sergio Hidalgo y Miguel Ibanez
 """
 
 from typing import Tuple, Union
+from collections import OrderedDict
 import numpy as np
 from math import ceil
 
@@ -225,3 +226,27 @@ def qsort_5(t: np.ndarray)-> np.ndarray:
 
     # se une a los pequeños el pivote y a la array resultante, los mayores
     return  np.append(np.append(qsort_5(t_smallers), pivot_value), qsort_5(t_greaters))
+
+
+# II-A
+def change_pd(c: int, l_coins: list[int])-> np.ndarray:
+    """
+    Esta funcion aplica el algoritmo change con
+        programacion dinamica.
+    Args:
+        c: cantidad optima de monedas.
+        l_coins: lista de monedas.
+    Returns:
+        ndarray: La array generada.
+    """
+
+    sorted_list = sorted(l_coins)[ : : -1]
+    d_change = np.zeros((sorted_list[0]+1, c))
+    for coin in sorted_list:
+        d_change[ coin ] = c // coin
+        c = c % coin
+    print(d_change)
+    return d_change
+
+def optimal_change_pd(c: int, l_coins: list[int])-> dict:
+    pass
