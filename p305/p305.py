@@ -3,7 +3,7 @@ Ejercicio p305.py
 Autores: Sergio Hidalgo y Miguel Ibanez
 """
 
-from typing import Tuple, Union
+from typing import Tuple, Union, Dict, List
 from collections import OrderedDict
 import numpy as np
 from math import ceil
@@ -239,14 +239,67 @@ def change_pd(c: int, l_coins: list[int])-> np.ndarray:
     Returns:
         ndarray: La array generada.
     """
+    n = len(l_coins)
+    dp = np.zeros((n + 1, c + 1), dtype=int)
 
-    sorted_list = sorted(l_coins)[ : : -1]
-    d_change = np.zeros((sorted_list[0]+1, c))
-    for coin in sorted_list:
-        d_change[ coin ] = c // coin
-        c = c % coin
-    print(d_change)
-    return d_change
+    for i in range(1, c + 1):
+        dp[0][i] = c + 1
 
-def optimal_change_pd(c: int, l_coins: list[int])-> dict:
-    pass
+    for i in range(1, n + 1):
+        for j in range(1, c + 1):
+            if l_coins[i - 1] <= j:
+                dp[i][j] = min(1 + dp[i][j - l_coins[i - 1]], dp[i - 1][j])
+            else:
+                dp[i][j] = dp[i - 1][j]
+
+    return dp
+
+def optimal_change_pd(c: int, l_coins: List[int]) -> Dict[int, int]:
+    n = len(l_coins)
+    dp = change_pd(c, l_coins)
+    coin_counts = OrderedDict()
+
+    i, j = n, c
+    while i > 0 and j > 0:
+        if dp[i][j] == dp[i - 1][j]:
+            i -= 1
+        else:
+            if l_coins[i - 1] <= j:
+                if l_coins[i - 1] in coin_counts:
+                    coin_counts[l_coins[i - 1]] += 1
+                else:
+                    coin_counts[l_coins[i - 1]] = 1
+                j -= l_coins[i - 1]
+    return coin_counts
+
+def knapsack_fract_greedy(l_weights: List[int], l_values: List[int], bound: int) -> Dict[int, float]:
+    n = len(l_weights)
+    value_per_weight = [(l_values[i] / l_weights[i], i) for i in range(n)]
+    value_per_weight.sort(reverse=True)
+
+    taken_weights = {i: 0.0 for i in range(n)}
+    current_weight = 0
+
+    for vpw, i in value_per_weight:
+        if current_weight + l_weights[i] <= bound:
+            taken_weights[i] = 1.0
+            current_weight += l_weights[i]
+        else:
+            remaining = bound - current_weight
+            taken_weights[i] = remaining / l_weights[i]
+            break
+
+    return taken_weights
+
+def knapsack_01_pd(l_weights: List[int], l_values: List[int], bound: int) -> int:
+    n = len(l_weights)
+    dp = [[0 for _ in range(bound + 1)] for _ in range(n + 1)]
+
+    for i in range(1, n + 1):
+        for w in range(bound + 1):
+            if l_weights[i - 1] <= w:
+                dp[i][w] = max(dp[i - 1][w], l_values[i - 1] + dp[i - 1][w - l_weights[i - 1]])
+            else:
+                dp[i][w] = dp[i - 1][w]
+
+    return dp[n][bound]
