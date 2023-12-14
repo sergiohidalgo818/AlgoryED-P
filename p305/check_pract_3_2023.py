@@ -42,7 +42,7 @@ def main(size=10, shift=3):
     print(30*'_' + "change PD")
     
     l_coins = [1, 2, 5, 10] #, 20, 50, 100, 200, 500]
-    l_coins = [1, 3, 5, 7]
+
     
     print('coins:', l_coins)
     for c in range(15, 26):
@@ -57,7 +57,9 @@ def main(size=10, shift=3):
     
     l_weights = [4, 4, 5]
     l_values = [10, 11, 15]
-    
+    # l_weights = [4, 3, 5, 2]
+    # l_values = [10, 40, 30, 20]
+
     print('weights:', l_weights)
     print(' values:', l_values)
     

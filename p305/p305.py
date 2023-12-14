@@ -239,32 +239,55 @@ def change_pd(c: int, l_coins: list[int])-> np.ndarray:
     Returns:
         ndarray: La array generada.
     """
+    # En n obtenemos la cantidad de monedas en la lista
     n = len(l_coins)
+
+    #Creamos una matriz llena de ceros de tam cantidad de monedas / cantidad optima
     dp = np.zeros((n + 1, c + 1), dtype=int)
 
+    # Inicializamos la primera fila de la matriz con valores cantidad optima + 1
     for i in range(1, c + 1):
         dp[0][i] = c + 1
 
     for i in range(1, n + 1):
         for j in range(1, c + 1):
             if l_coins[i - 1] <= j:
+                # Calculamos el minimo entre los dos valores de la matriz si es menor:
                 dp[i][j] = min(1 + dp[i][j - l_coins[i - 1]], dp[i - 1][j])
             else:
+                # Copiamos el valor de la fila anterior si es mayor
                 dp[i][j] = dp[i - 1][j]
 
     return dp
 
 def optimal_change_pd(c: int, l_coins: List[int]) -> Dict[int, int]:
+    """
+    Calcula la cantidad optima de monedas para el cambio.
+    Args:
+        c: cantidad optima de monedas.
+        l_coins: lista de monedas.
+    Returns:
+        ndarray: Diccionario que contiene las monedas utilizadas y sus cantidades
+    """
+
+    # Obtenemos la cantidad de monedas en la lista
     n = len(l_coins)
+
+    # Usamos change_pd para generar la matriz 
     dp = change_pd(c, l_coins)
+
+    # Creamos un diccionario ordenado para almacenar las cantidades de cada tipo de moneda
     coin_counts = OrderedDict()
 
     i, j = n, c
     while i > 0 and j > 0:
+        # Si los valores de la matriz son iguales, pasamos a la siguiente fila en la matriz
         if dp[i][j] == dp[i - 1][j]:
             i -= 1
         else:
             if l_coins[i - 1] <= j:
+                # Si la moneda actual es menor o igual al tam actual de la lista, 
+                # agregamos la moneda al conteo y actualizamos
                 if l_coins[i - 1] in coin_counts:
                     coin_counts[l_coins[i - 1]] += 1
                 else:
@@ -273,6 +296,16 @@ def optimal_change_pd(c: int, l_coins: List[int]) -> Dict[int, int]:
     return coin_counts
 
 def knapsack_fract_greedy(l_weights: List[int], l_values: List[int], bound: int) -> Dict[int, float]:
+    """
+    Esta funcion resuelve el problema de la mochila fraccionaria utilizando un enfoque codicioso
+    Calcula los pesos a tomar de cada elemento en la solucion greedy del problema de la mochila fraccionaria.
+    Args:
+        l_weights: Lista de pesos de los elementos
+        l_values: Lista de valores de los elementos
+        bound: limite del peso de la mochila
+    Returns:
+        ndarray: La array generada.
+    """
     n = len(l_weights)
     value_per_weight = [(l_values[i] / l_weights[i], i) for i in range(n)]
     value_per_weight.sort(reverse=True)
@@ -289,17 +322,36 @@ def knapsack_fract_greedy(l_weights: List[int], l_values: List[int], bound: int)
             taken_weights[i] = remaining / l_weights[i]
             break
 
-    return taken_weights
+    return taken_weights 
+
 
 def knapsack_01_pd(l_weights: List[int], l_values: List[int], bound: int) -> int:
+    """
+    Resuelve el problema de la mochila 0-1 y calcula el valor optimo de la mochila 0-1 obtenido mediante programacion dinamica.
+    Args:
+        l_weights: Lista de pesos de los elementos.
+        l_values: Lista de valores de los elementos.
+        bound: limite de peso de la mochila.
+    Returns:
+        int: El valor optimo de la mochila
+    """
+
+    # Obtienemos la longitud de la lista de pesos
     n = len(l_weights)
-    dp = [[0 for _ in range(bound + 1)] for _ in range(n + 1)]
+    
+    # Inicializamos la matriz de programacion dinamica
+    dp = np.zeros((bound + 1, n + 1), dtype=int)
 
+    # Iteramos sobre los elementos y el limite de peso
     for i in range(1, n + 1):
-        for w in range(bound + 1):
-            if l_weights[i - 1] <= w:
-                dp[i][w] = max(dp[i - 1][w], l_values[i - 1] + dp[i - 1][w - l_weights[i - 1]])
+        for j in range(bound + 1): 
+            # Comprueba si el peso del elemento actual cabe en el limite actual
+            if l_weights[i - 1] <= j: 
+                # Calcula el valor maximo tomando el valor actual mas el valor en la fila anterior y la columna correspondiente al peso restante
+                dp[i][j] = max(dp[i - 1][j], l_values[i - 1] + dp[i - 1][j - l_weights[i - 1]])
             else:
-                dp[i][w] = dp[i - 1][w]
+                # Si el peso del elemento actual excede el limite actual, se mantiene el valor anterior
+                dp[i][j] = dp[i - 1][j]
 
+    # Retorna el valor optimo de la mochila 0-1 obtenido mediante programacion dinmica
     return dp[n][bound]
