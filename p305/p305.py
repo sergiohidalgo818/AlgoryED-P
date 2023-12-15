@@ -306,23 +306,35 @@ def knapsack_fract_greedy(l_weights: List[int], l_values: List[int], bound: int)
     Returns:
         ndarray: La array generada.
     """
-    n = len(l_weights)
-    value_per_weight = [(l_values[i] / l_weights[i], i) for i in range(n)]
-    value_per_weight.sort(reverse=True)
+    # Diccionario para almacenar los pesos a tomar de cada elemento
+    diccionario = dict()
 
-    taken_weights = {i: 0.0 for i in range(n)}
-    current_weight = 0
+    # Lista de tuplas con peso, valor e índice
+    lista = list(zip(l_weights, l_values, range(len(l_weights))))
 
-    for vpw, i in value_per_weight:
-        if current_weight + l_weights[i] <= bound:
-            taken_weights[i] = 1.0
-            current_weight += l_weights[i]
+    # Ordenamos la lista por la relación valor-peso (mayor a menor)
+    lista.sort(key=lambda x: x[1] / x[0], reverse=True)
+
+    for i in range(len(lista)):
+        noseobj = lista[i][2]
+        if bound <= 0:
+            # Si el límite de peso es menor o igual a cero, asigna un peso de 0 al elemento actual
+            diccionario[noseobj] = 0
+
+        if lista[i][0] <= bound:
+            # Si el peso del elemento cabe en el límite, se asigna su peso completo
+            diccionario[noseobj] = float(lista[i][0])
+            # Restamos el peso del elemento del límite total disponible
+            bound -= lista[i][0]
         else:
-            remaining = bound - current_weight
-            taken_weights[i] = remaining / l_weights[i]
-            break
+            # Calculamos la fracción del peso que cabe en el límite
+            diccionario[noseobj] = float(bound / lista[i][0] * lista[i][0])
+            bound = 0
 
-    return taken_weights 
+    # Ordena el diccionario por las claves
+    diccionario = dict(OrderedDict(sorted(diccionario.items())))
+
+    return diccionario
 
 
 def knapsack_01_pd(l_weights: List[int], l_values: List[int], bound: int) -> int:
@@ -336,22 +348,33 @@ def knapsack_01_pd(l_weights: List[int], l_values: List[int], bound: int) -> int
         int: El valor optimo de la mochila
     """
 
-    # Obtienemos la longitud de la lista de pesos
-    n = len(l_weights)
-    
-    # Inicializamos la matriz de programacion dinamica
-    dp = np.zeros((bound + 1, n + 1), dtype=int)
+    # Inicializamos la matriz
+    dp = np.zeros((len(l_weights), bound + 1), dtype=int)
 
-    # Iteramos sobre los elementos y el limite de peso
-    for i in range(1, n + 1):
-        for j in range(bound + 1): 
-            # Comprueba si el peso del elemento actual cabe en el limite actual
-            if l_weights[i - 1] <= j: 
-                # Calcula el valor maximo tomando el valor actual mas el valor en la fila anterior y la columna correspondiente al peso restante
-                dp[i][j] = max(dp[i - 1][j], l_values[i - 1] + dp[i - 1][j - l_weights[i - 1]])
-            else:
-                # Si el peso del elemento actual excede el limite actual, se mantiene el valor anterior
+    for i in range(len(l_weights)):
+        for j in range(bound + 1):
+
+            if j == 0:
+                # Si el peso de la mochila es 0, el valor es 0
+                dp[i][j] = 0
+                
+            elif i == 0:
+                # Si el peso del elemento es menor o igual al peso de la mochila
+                if l_weights[i] <= j:
+                    # Asignamos el valor del elemento
+                    dp[i][j] = l_values[i]
+
+            # Si el peso del elemento actual es mayor que el peso disponible de la mochila
+            elif l_weights[i] > j:
+                # Copiamos el valor de la celda de arriba
                 dp[i][j] = dp[i - 1][j]
 
-    # Retorna el valor optimo de la mochila 0-1 obtenido mediante programacion dinmica
-    return dp[n][bound]
+            else:
+                # Tomamos el máximo entre el valor sin el elemento actual y con el elemento actual
+                dp[i][j] = max(
+                    dp[i - 1][j],
+                    l_values[i] + dp[i - 1][j - l_weights[i]])
+
+    return dp[len(l_weights) - 1][bound]
+
+
