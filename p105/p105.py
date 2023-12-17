@@ -39,7 +39,9 @@ def matrix_multiplication(m_1: np.ndarray, m_2: np.ndarray) -> np.ndarray:
 # I-B
 def rec_bb(t: List, first: int, last: int, key: int) -> int:
     # m es la parte media de la lista (primero + ultimo)/2
-
+    if first > last:
+        return None
+    
     m = int((first+last)/2)
     # si el elemento del medio es mayor que el numero a buscar
     if t[m] > key:
@@ -177,14 +179,10 @@ def create_min_heap(h: np.ndarray):
     # control de errores
     if h is None:
         return None
-
-    # bucle inverso desde el padre
-    for node in range((len(h) - 1) // 2, -1, -1):
-        # se llama a la funcion min_heapyfi por cada iteracion
-        min_heapify(h, node)
-
+    size = len(h)
+    for i in range(size, -1, -1):
+        min_heapify(h, i)
     return h
-
 
 def min_heap_extract(h: np.ndarray) -> Tuple[int, np.ndarray]:
 

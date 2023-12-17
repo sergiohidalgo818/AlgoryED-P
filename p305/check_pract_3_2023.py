@@ -57,8 +57,8 @@ def main(size=10, shift=3):
     
     l_weights = [4, 4, 5]
     l_values = [10, 11, 15]
-    # l_weights = [4, 3, 5, 2]
-    # l_values = [10, 40, 30, 20]
+    l_weights = [4, 3, 5, 2]
+    l_values = [10, 40, 30, 20]
 
     print('weights:', l_weights)
     print(' values:', l_values)

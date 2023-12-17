@@ -99,12 +99,10 @@ def create_pq(n: int, l_g: list) -> queue.PriorityQueue:
     # l_g -> (ramax, ramay, peso)
     queue = PriorityQueue(n)
     # se insertan los nodos en la cola de prioridad
-    for i in range(n):
+    for elem in l_g:
+        (a, b, c) = elem
         # donde el formato es (priority, data)
-        # l_g[i][2] es el peso
-        # l_g[i][0] y l_g[i][1] representan las ramas
-        queue.put((l_g[i][2], (l_g[i][0], l_g[i][1])))
-
+        queue.put((c, (a, b)))
     return queue
 
 
@@ -121,12 +119,19 @@ def kruskal(n: int, l_g: list) -> Tuple[int, list]:
     cd = init_cd(n)  # se inicializa el conjunto disjunto
     queue = create_pq(n, l_g)  # se inicializa la cola de prioridad
     while not queue.empty():  # mientras dicha cola no este vacia
-        _, (u, v) = queue.get()  # se popean los vertices
+        w, (u, v) = queue.get()  # se popean los vertices
         x = find(u, cd)  # se busca por una rama
         y = find(v, cd)  # y uego por otra rama
         if x != y:
-            l_t.append((u, v))  # si son distintos se introduce tal cual
+            l_t.append((u, v, w))  # si son distintos se introduce tal cual
             union(x, y, cd)  # se hace la union de ambos
+
+    while not queue.empty():
+        queue.get()
+
+    if len(l_t) < n-1:
+        return None
+    
     return (n, l_t)
 
 
@@ -210,18 +215,18 @@ def kruskal_2(n: int, l_g: list) -> Tuple[int, tuple]:
     l_t = []  # nuevo grafo
     cd = init_cd(n)  # se inicializa el conjunto disjunto
     queue = create_pq(n, l_g)  # se inicializa la cola de prioridad
-
-    start = time.time()
+    times = 0
     while not queue.empty():  # mientras dicha cola no este vacia
         _, (u, v) = queue.get()  # se popean los vertices
+        
+        start = time.time()
         x = find(u, cd)  # se busca por una rama
         y = find(v, cd)  # y luego por otra rama
         if x != y:
             l_t.append((u, v))  # si son distintos se introduce tal cual
             union(x, y, cd)  # se hace la union de ambos
-
-    end = time.time()
-    times = end - start
+        end = time.time()
+        times += end - start
     return (times, (n, l_t))
 
 
